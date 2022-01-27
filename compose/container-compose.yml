@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+ web:
+  image: devserver
+  restart: always
+  user: root
+  hostname: webtest
+  volumes:
+   - <DATABASE-DIR>:/var/lib/mysql:Z
+   - <WEB-ROOT>:/var/www:Z
+   - <NGINX-VHOST-CONFIGS>:/etc/nginx/sites-enabled:Z
+  ports:
+   - 80:80
+   - 3306:3306

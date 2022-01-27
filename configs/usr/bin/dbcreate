@@ -1,0 +1,30 @@
+#!/bin/bash
+dbname=$1
+if [ -e $dbname ]
+then
+	echo  "Usage: createdb <Database Name>"
+	exit 1
+fi
+error=0
+# Create DB
+db_name="${dbname}_db"
+db_password=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13)
+db_username="${dbname}_dbadm"
+mysql -e "create database \`${db_name}\`;"
+error=$(($error+$?))
+mysql -e "create user \`${db_username}\`@\`localhost\`;"
+error=$(($error+$?))
+mysql -e "grant all privileges on \`${db_name}\`.* to \`${db_username}\`@\`localhost\` identified by '${db_password}';"
+error=$(($error+$?))
+mysql -e "flush privileges;"
+error=$(($error+$?))
+
+if [ $error == 0 ]
+then
+	echo "*** NOTICE ***"
+	echo "Save this information:"
+	echo "Database Name: ${db_name}"
+	echo "Database Username: ${db_username}"
+	echo "Database Password: ${db_password}"
+fi
+#End

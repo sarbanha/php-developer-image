@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+echo $@
+t=$(getopt -o +d:l:v -n Error -- ${@})
+echo $Error
+echo ${t}

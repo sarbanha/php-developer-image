@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+dbname=$1
+if [ -e $dbname ]
+then
+	echo  "Usage: dropdb <Database Name>"
+	exit 1
+fi
+error=0
+# Drop DB
+db_name="${dbname}_db"
+db_username="${dbname}_dbadm"
+mysql -e "revoke all privileges on *.* from \`${db_username}\`@\`localhost\` ;"
+error=$(($error+$?))
+mysql -e "drop user \`${db_username}\`@\`localhost\`;"
+error=$(($error+$?))
+mysql -e "drop database \`${db_name}\`;"
+error=$(($error+$?))
+mysql -e "flush privileges;"
+error=$(($error+$?))
+
+if [ $error == 0 ]
+then
+	echo "*** NOTICE ***"
+	echo "Database ${db_name} and its user priviles were removed."
+else
+	echo "Database ${db_name} removal was failed or incomplete."
+fi
