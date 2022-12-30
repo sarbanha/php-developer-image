@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+webroot=$1
+if [ -e $webroot ]
+then
+	echo  "Usage: run-deploy <Web Root>"
+	echo  "Note: Webroot is the name of root dir of website under /var/www/"
+	exit 1
+fi
+error=0
+
+if [ -e "/var/www/${webroot}/deploy.sh" ]; then
+	. /var/www/${webroot}/deploy.sh
+fi
